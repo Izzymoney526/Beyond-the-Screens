@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Beyond the Screens — Post</title>
+  <meta name="description" content="Beyond the Screens article."/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .gallery-item {
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .gallery-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .gallery-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .download-btn {
+      display: inline-block;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .download-btn:hover {
+      background: linear-gradient(135deg, #2563eb, #0891b2);
+    }
+    .gallery-link {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .view-gallery-btn {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, background 0.3s ease;
+      display: inline-block;
+    }
+    .view-gallery-btn:hover {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="bg-stage" aria-hidden="true">
+    <video id="bgA" muted playsinline preload="auto" crossorigin="anonymous" aria-hidden="true"></video>
+    <video id="bgB" muted playsinline preload="auto" crossorigin="anonymous" aria-hidden="true"></video>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <div id="bg-dim" aria-hidden="true"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <div class="logoSquare">BTS</div>
+        <div class="brandText">
+          <div class="brandTitle">Beyond the Screens</div>
+          <div class="brandTag">From Vision to Vibes</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap post-main" id="postMain">
+    <article id="postArticle" class="post-article" data-animate>Loading article…</article>
+
+    <section id="post-gallery" class="gallery"></section>
+
+    <!-- View Full Gallery Button -->
+    <div class="gallery-link" id="gallery-button-container">
+      <a id="view-gallery" href="https://photos.app.goo.gl/y7x7REFebAejWKHT9" target="_blank" class="view-gallery-btn">
+        📸 View Full Gallery
+      </a>
+    </div>
+
+    <aside class="post-aside">
+      <div class="side-card">
+        <h3>Share</h3>
+        <div style="display:flex;gap:8px">
+          <button id="shareWA" class="btn primary">Share on WhatsApp</button>
+          <button id="shareCopy" class="btn outline">Copy link</button>
+        </div>
+      </div>
+
+      <div class="side-card" id="seoPanel">
+        <h3>SEO</h3>
+        <div id="seoContent" class="seo-panel muted small"></div>
+      </div>
+
+      <div class="side-card">
+        <h3>Comments</h3>
+        <div id="commentsWrap"></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer wrap">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+      <div>© <span id="year-post"></span> Beyond the Screens</div>
+      <div>Built by <a href="https://wa.me/message/GFH26N2VQAKNG1" target="_blank">Izzy Web Solutions</a></div>
+    </div>
+  </footer>
+
+  <script>
+  document.getElementById('year-post').textContent = new Date().getFullYear();
+
+  async function loadPost() {
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get("id");
+    if (!postId) return;
+
+    try {
+      const res = await fetch("post.json");
+      const posts = await res.json();
+      const post = posts.find(p => String(p.id) === postId);
+
+      if (!post) {
+        document.getElementById("postArticle").innerHTML = "<p>Post not found.</p>";
+        return;
+      }
+
+      const article = document.getElementById("postArticle");
+      article.innerHTML = `
+        <h1>${post.title}</h1>
+        <p class="meta">By ${post.author} • ${post.date}</p>
+        <img src="${post.thumbnail}" alt="${post.title}" class="post-thumb" style="width:100%;border-radius:12px;margin:20px 0;"/>
+        ${post.content}
+      `;
+
+      const gallery = document.getElementById("post-gallery");
+      gallery.innerHTML = "";
+      if (Array.isArray(post.images)) {
+        post.images.forEach(img => {
+          const container = document.createElement("div");
+          container.classList.add("gallery-item");
+
+          const image = document.createElement("img");
+          image.src = img;
+          image.alt = post.title;
+          image.classList.add("gallery-img");
+
+          const downloadBtn = document.createElement("a");
+          downloadBtn.href = img;
+          downloadBtn.download = "";
+          downloadBtn.classList.add("download-btn");
+          downloadBtn.innerText = "📥 Download";
+
+          container.appendChild(image);
+          container.appendChild(downloadBtn);
+          gallery.appendChild(container);
+        });
+      }
+    } catch (err) {
+      console.error("Error loading post:", err);
+      document.getElementById("postArticle").innerHTML = "<p>Error loading post.</p>";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadPost);
+  </script>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

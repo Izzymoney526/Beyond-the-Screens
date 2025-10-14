@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Beyond the Screens — From Vision to Vibes</title>
+  <meta name="description" content="Beyond the Screens — cinematic reporting, creative essays and investigations. Powered by Izzy Web Solutions."/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background stage (crossfade videos + canvas fallback) -->
+  <div id="bg-stage" aria-hidden="true">
+    <video id="bgA" muted playsinline preload="auto" crossorigin="anonymous" aria-hidden="true"></video>
+    <video id="bgB" muted playsinline preload="auto" crossorigin="anonymous" aria-hidden="true"></video>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+    <div id="bg-dim" aria-hidden="true"></div>
+  </div>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="wrap topbar-row">
+      <div class="brand">
+        <div class="logoSquare">BTS</div>
+        <div class="brandText">
+          <div class="brandTitle">Beyond the Screens</div>
+          <div class="brandTag">From Vision to Vibes</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" role="banner">
+    <div class="hero-inner wrap">
+      <div class="hero-left">
+        <h1 class="hero-title">Beyond the Screens</h1>
+        <p class="hero-lead">Stories that live between reality and imagination — cinematic reporting, photo essays and creative investigations.</p>
+        <div class="cta-row">
+          <a href="#feed" class="btn primary">Read Stories</a>
+          <a href="https://wa.me/message/GFH26N2VQAKNG1" target="_blank" class="btn ghost">Advertise / Partner</a>
+        </div>
+      </div>
+      <div class="hero-right" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- MAIN FEED -->
+  <main class="wrap main" id="feed">
+    <section class="section featured">
+      <h2 class="section-title">Featured</h2>
+      <div id="featuredCard" class="featured-card" data-animate></div>
+    </section>
+
+    <section class="section posts">
+      <h2 class="section-title">Latest Insights</h2>
+      <div id="postsGrid" class="posts-grid" aria-live="polite"></div>
+      <div class="center" style="margin-top:18px"><button id="loadMore" class="btn outline">Load more</button></div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brandTitle">Beyond the Screens</div>
+        <div class="muted small">Cinematic stories & analysis. From Nigeria to the world.</div>
+      </div>
+      <div>
+        <strong>Contact</strong>
+        <ul class="footer-links">
+          <li><a href="mailto:izzywebsolutions26@gmail.com">izzywebsolutions26@gmail.com</a></li>
+          <li><a href="https://wa.me/message/GFH26N2VQAKNG1" target="_blank">Advertise via WhatsApp</a></li>
+        </ul>
+      </div>
+      <div>
+        <strong>About</strong>
+        <p class="muted small">Powered by <a href="https://wa.me/message/GFH26N2VQAKNG1" target="_blank">Izzy Web Solutions</a></p>
+      </div>
+      <div>
+        <strong>Legal</strong>
+        <ul class="footer-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:18px;color:var(--muted)">&copy; <span id="year"></span> Beyond the Screens</div>
+  </footer>
+
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+  <script src="script.js" defer></script>
+</body>
+</html>
