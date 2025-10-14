@@ -140,7 +140,7 @@
     if (!postId) return;
 
     try {
-      const res = await fetch("post.json");
+      const res = await fetch("/posts.json");
       const posts = await res.json();
       const post = posts.find(p => String(p.id) === postId);
 
